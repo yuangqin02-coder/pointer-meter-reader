@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model weights (large files; provide download link instead)
+# Exception: committed weights in yolo最新权重文件/ are tracked
+*.pth
+*.onnx
+*.engine
+*.tflite
+
+# Datasets and outputs (may be large)
+1.原始数据集/
+2.yolo识别之后图片/
+3.边框截取之后/
+4.摆正+识别/
+对比/
+outputs/
+debug_output/
+batch_image_results/
+reader_comparison_results/
+reader_comparison_results_2/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Keep folder structure placeholders
+!.gitkeep
