@@ -31,7 +31,6 @@ English | [中文](#中文)
   - [快速开始](#快速开始)
   - [使用流程](#使用流程)
   - [注意：硬编码路径](#注意硬编码路径)
-  - [引用](#引用)
   - [协议](#协议)
 
 ---
@@ -108,11 +107,9 @@ The current code is an engineering implementation variant that uses:
 │   └── yolo_metrics_summary.csv
 │
 ├── 对比/                          # Method comparison results
-│   ├── read2/
-│   └── reader_comparison_results_2/
-│
-└── 参考论文/
-    └── _zhangzhen_extract.txt
+    ├── read2/
+    └── reader_comparison_results_2/
+
 ```
 
 ---
@@ -345,13 +342,6 @@ pip install -r requirements.txt
 本仓库保留了原作者开发环境中的绝对路径（如 `/home/qya/...`）。**运行前请将这些路径修改为你自己电脑上的路径。**
 
 需要修改路径的文件见上方 [Important: Hard-coded Paths](#important-hard-coded-paths)。
-
-## 引用
-
-如果你使用了本代码，请引用参考论文：
-
-> 张震, 刘建昌, 葛帅兵, 张俊杰, 张凯. “基于改进 YOLOv8 的指针式仪表读数识别算法.”
-> 《郑州大学学报（工学版）》, 2026, 47(3): 83-91.
 
 ## 协议
 
