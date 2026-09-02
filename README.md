@@ -10,19 +10,29 @@ English | [中文](#中文)
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Project Structure](#project-structure)
-3. [Results](#results)
-4. [Installation](#installation)
-5. [How to Use](#how-to-use)
-   1. Step 1: Calibrate
-   2. Step 2: YOLO detection
-   3. Step 3: Crop meter regions
-   4. Step 4: Read values
-   5. Step 5: Compare methods
-6. [Important: Hard-coded Paths](#important-hard-coded-paths)
-7. [Citation](#citation)
-8. [License](#license)
+- [Pointer Meter Reader / 指针式仪表读数识别](#pointer-meter-reader--指针式仪表读数识别)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Project Structure](#project-structure)
+  - [Results](#results)
+  - [Visual Examples / 效果展示](#visual-examples--效果展示)
+  - [Installation](#installation)
+  - [How to Use](#how-to-use)
+    - [Step 1: Calibrate](#step-1-calibrate)
+    - [Step 2: YOLO detection](#step-2-yolo-detection)
+    - [Step 3: Crop meter regions](#step-3-crop-meter-regions)
+    - [Step 4: Read values](#step-4-read-values)
+      - [Single image](#single-image)
+      - [Batch processing](#batch-processing)
+    - [Step 5: Compare methods](#step-5-compare-methods)
+  - [Important: Hard-coded Paths](#important-hard-coded-paths)
+  - [License](#license)
+- [中文](#中文)
+  - [快速开始](#快速开始)
+  - [使用流程](#使用流程)
+  - [注意：硬编码路径](#注意硬编码路径)
+  - [引用](#引用)
+  - [协议](#协议)
 
 ---
 
@@ -47,12 +57,8 @@ Aligned images, pointer mask, result image, summary.csv
 (Optional) multi-method comparison (batch_compare_readers.py)
 ```
 
-The reference paper is:
-
-> 张震, 刘建昌, 葛帅兵, 张俊杰, 张凯. “基于改进 YOLOv8 的指针式仪表读数识别算法.”
-> 《郑州大学学报（工学版）》, 2026, 47(3): 83-91.
-
 The current code is an engineering implementation variant that uses:
+
 - **YOLO** for meter detection,
 - **ORB + RANSAC homography** (with Hough circle fallback) for pose correction,
 - **HSV red-pointer segmentation** for pointer extraction,
@@ -115,20 +121,36 @@ The current code is an engineering implementation variant that uses:
 
 Our best method (`proposed_multi_anchor`) on the collected dataset:
 
-| Method | Success rate | MAE | Accuracy within ±0.05 |
-|---|---:|---:|---:|
-| proposed_multi_anchor | 1.000 | 0.0087 | 1.000 |
-| equal_angle_linear | 1.000 | 0.0295 | 0.948 |
-| traditional_hough | 0.931 | 0.1075 | 0.889 |
+| Method                | Success rate |    MAE | Accuracy within ±0.05 |
+| --------------------- | -----------: | -----: | ---------------------: |
+| proposed_multi_anchor |        1.000 | 0.0087 |                  1.000 |
+| equal_angle_linear    |        1.000 | 0.0295 |                  0.948 |
+| traditional_hough     |        0.931 | 0.1075 |                  0.889 |
 
 YOLO detection performance (from `yolo参数/yolo_metrics_summary.csv`):
 
-| Metric | Value |
-|---|---:|
-| Precision | 0.99417 |
-| Recall | 1.00000 |
-| mAP@0.5 | 0.99500 |
+| Metric       |   Value |
+| ------------ | ------: |
+| Precision    | 0.99417 |
+| Recall       | 1.00000 |
+| mAP@0.5      | 0.99500 |
 | mAP@0.5:0.95 | 0.97950 |
+
+---
+
+## Visual Examples / 效果展示
+
+Here's a complete pipeline example showing how an image is processed:
+
+| Step                                    | Image                              | Description                                     |
+| --------------------------------------- | ---------------------------------- | ----------------------------------------------- |
+| 1.**Original** 原始仪表           | ![Original](images/1-original.jpg) | Raw meter image captured from camera            |
+| 2.**Cropped** 裁剪                | ![Cropped](images/2-cropped.jpg)   | Single meter region extracted by YOLO detection |
+| 3.**Aligned** 摆正                | ![Aligned](images/3-aligned.jpg)   | Image aligned to template using ORB + RANSAC    |
+| 4.**Pointer Mask** 指针提取       | ![Mask](images/4-pointer_mask.jpg) | Red pointer segmented in HSV color space        |
+| 5.**Recognition Result** 识别结果 | ![Result](images/5-result.jpg)     | Final reading displayed on aligned image        |
+
+The complete pipeline transforms a raw meter image to a precise numerical reading with high accuracy.
 
 ---
 
@@ -168,6 +190,7 @@ python 990.py
 ```
 
 What happens:
+
 1. A window opens showing the template image.
 2. Press `c` to start calibration.
 3. Click the **center** of the gauge.
@@ -200,6 +223,7 @@ python predict_1111.py
 ```
 
 This produces:
+
 - Detection images in `<project>/predict/`
 - Label files in `<project>/predict/labels/*.txt`
 
@@ -267,32 +291,14 @@ This repository still contains the original hard-coded paths from the developmen
 
 The files with hard-coded paths are:
 
-| File | What to change |
-|---|---|
-| `用到的代码/predict_1111.py` | Path to YOLO weights, input images, and output directory |
-| `用到的代码/separate_1111.py` | Paths to YOLO detection images, labels, and crop output |
-| `用到的代码/990.py` | `IMG_PATH` (template image) |
-| `用到的代码/read_copy_bai_new.py` | `IMG_PATH`, `TEST_IMG_PATH`, `DEBUG_OUTPUT_DIR` |
+| File                                | What to change                                           |
+| ----------------------------------- | -------------------------------------------------------- |
+| `用到的代码/predict_1111.py`      | Path to YOLO weights, input images, and output directory |
+| `用到的代码/separate_1111.py`     | Paths to YOLO detection images, labels, and crop output  |
+| `用到的代码/990.py`               | `IMG_PATH` (template image)                            |
+| `用到的代码/read_copy_bai_new.py` | `IMG_PATH`, `TEST_IMG_PATH`, `DEBUG_OUTPUT_DIR`    |
 
 `batch_read_copy_bai_copy.py` and `batch_compare_readers.py` already use `argparse` and only need a default template path if you want to change it.
-
----
-
-## Citation
-
-If you use this code in your research, please cite the reference paper:
-
-```bibtex
-@article{zhang2026improved,
-  title={基于改进 YOLOv8 的指针式仪表读数识别算法},
-  author={张震 and 刘建昌 and 葛帅兵 and 张俊杰 and 张凯},
-  journal={郑州大学学报（工学版）},
-  volume={47},
-  number={3},
-  pages={83--91},
-  year={2026}
-}
-```
 
 ---
 
